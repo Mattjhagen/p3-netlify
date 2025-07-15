@@ -44,6 +44,66 @@ const observerOptions = {
     rootMargin: '0px 0px -100px 0px'
 };
 
+
+// Mobile Menu Toggle
+const mobileNavToggle = document.getElementById('mobileNavToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileClose = document.getElementById('mobileClose');
+const mobileMenuLinks = document.querySelectorAll('.mobile-menu-links a');
+
+// Toggle mobile menu
+mobileNavToggle.addEventListener('click', () => {
+    mobileNavToggle.classList.toggle('active');
+    mobileMenu.classList.toggle('active');
+    document.body.classList.toggle('menu-open');
+});
+
+// Close mobile menu
+mobileClose.addEventListener('click', () => {
+    mobileNavToggle.classList.remove('active');
+    mobileMenu.classList.remove('active');
+    document.body.classList.remove('menu-open');
+});
+
+// Close menu when clicking a link
+mobileMenuLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        mobileNavToggle.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        document.body.classList.remove('menu-open');
+    });
+});
+
+// Mobile connect wallet
+document.querySelector('.mobile-connect-wallet').addEventListener('click', () => {
+    alert('Wallet connection would be implemented here');
+    mobileNavToggle.classList.remove('active');
+    mobileMenu.classList.remove('active');
+    document.body.classList.remove('menu-open');
+});
+
+// Highlight words pulse animation for all devices
+function startHighlightAnimation() {
+    const highlights = document.querySelectorAll('.highlight-word');
+    let currentIndex = 0;
+
+    // Run on all devices
+    setInterval(() => {
+        // Remove active class from all
+        highlights.forEach(highlight => highlight.classList.remove('active'));
+        
+        // Add active class to current
+        highlights[currentIndex].classList.add('active');
+        
+        // Move to next, loop back to start
+        currentIndex = (currentIndex + 1) % highlights.length;
+    }, 1000); // 3 seconds interval
+}
+
+// Start the animation when page loads
+document.addEventListener('DOMContentLoaded', startHighlightAnimation);
+
+
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
