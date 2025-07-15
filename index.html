@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P3 Lending - Decentralized P2P Lending</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-bg: #0a0a0f;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --glow-color: #667eea;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle at 20% 80%, #667eea 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, #764ba2 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, #f093fb 0%, transparent 50%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-img {
+            height: 45px;
+            width: auto;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            margin-left: 15px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .connect-wallet {
+            padding: 12px 30px;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .connect-wallet:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 50px;
+            padding: 100px 50px;
+            text-align: center;
+            position: relative;
+            background-image: 
+                linear-gradient(135deg, rgba(10, 10, 15, 0.85) 0%, rgba(102, 126, 234, 0.3) 50%, rgba(10, 10, 15, 0.85) 100%),
+                url('/hero.jpg');
+            background-size: 100%;
+            background-position: center;
+            background-attachment: fixed;
+            overflow: hidden;
+        }
+
+        /* Text Highlighter Styles */
+.highlight-word {
+    position: relative;
+    display: inline-block;
+    font-weight: 600;
+    color: #fff;
+    padding: 0 4px;
+    transition: all 0.3s ease;
+}
+
+.highlight-word::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: -2px;
+    right: -2px;
+    height: 100%;
+    z-index: -1;
+    transform: skewY(-2deg);
+    transition: all 0.3s ease;
+    opacity: 0.9;
+}
+
+.highlight-blockchain::before {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.highlight-bitcoin::before {
+    background: linear-gradient(135deg, #f7931a 0%, #ffb84d 100%);
+    box-shadow: 0 5px 15px rgba(247, 147, 26, 0.4);
+}
+
+.highlight-trust::before {
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+}
+
+.highlight-word:hover {
+    transform: translateY(-2px);
+}
+
+.highlight-word:hover::before {
+    transform: skewY(-2deg) scale(1.05);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+}
+
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            background: #fff;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 5s ease-in-out infinite;
+            text-shadow: 0 0 80px rgba(79, 172, 254, 0.5);
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(30deg); }
+        }
+
+        .hero p {
+            font-size: 24px;
+            color: var(--text-secondary);
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-primary {
+            padding: 18px 50px;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .cta-secondary {
+            padding: 18px 50px;
+            background: transparent;
+            border: 2px solid rgba(102, 126, 234, 0.5);
+            border-radius: 50px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cta-secondary:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: rgba(102, 126, 234, 0.8);
+            transform: translateY(-3px);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 100px 50px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 50px;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 80px;
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 60px rgba(79, 172, 254, 0.5);
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 50%);
+            animation: pulse 3s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        .feature-card:hover::after {
+            opacity: 1;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(0.8); }
+            50% { transform: scale(1.2); }
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Brand Showcase Section */
+        .brand-showcase {
+            padding: 100px 50px;
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.05) 0%, rgba(240, 147, 251, 0.05) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-showcase::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://i.imgur.com/P3Banner4.png') no-repeat center;
+            background-size: cover;
+            opacity: 0.03;
+            z-index: -1;
+        }
+
+        .brand-showcase h2 {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 80px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 60px rgba(79, 172, 254, 0.5);
+        }
+
+        .brand-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .brand-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            align-items: center;
+        }
+
+        .brand-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(79, 172, 254, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .brand-card:hover::before {
+            opacity: 1;
+        }
+
+        .brand-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(79, 172, 254, 0.3);
+            border-color: rgba(79, 172, 254, 0.5);
+        }
+
+        .brand-card.featured {
+            transform: scale(1.05);
+            border-color: rgba(240, 147, 251, 0.3);
+            background: rgba(240, 147, 251, 0.05);
+        }
+
+        .brand-card.featured:hover {
+            transform: translateY(-15px) scale(1.08);
+            box-shadow: 0 35px 70px rgba(240, 147, 251, 0.4);
+        }
+
+        .brand-image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .brand-card:hover .brand-image {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(79, 172, 254, 0.4);
+        }
+
+        .brand-card h3 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-card p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Loan Dashboard */
+        .dashboard {
+            padding: 100px 50px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Scroll Animation Classes */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+        .dashboard h2 {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 80px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 60px rgba(240, 147, 251, 0.5);
+        }
+
+        .loan-cards {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .loan-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loan-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .loan-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .loan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(79, 172, 254, 0.2);
+        }
+
+        .loan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .loan-amount {
+            font-size: 32px;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .loan-badge {
+            padding: 8px 16px;
+            background: rgba(79, 172, 254, 0.2);
+            border-radius: 20px;
+            font-size: 14px;
+            color: #4facfe;
+        }
+
+        .loan-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .loan-detail {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .loan-detail span:first-child {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .loan-detail span:last-child {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .reputation-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .reputation-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .loan-action {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .loan-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            padding: 50px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .social-links a {
+            width: 50px;
+            height: 50px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--primary-gradient);
+            border-color: transparent;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Day/Night Theme Toggle - Added CSS Only */
+        .theme-toggle {
+            position: fixed;
+            top: 25px;
+            right: 20px;
+            z-index: 1001;
+            width: 60px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-toggle-circle {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle.light .theme-toggle-circle {
+            transform: translateX(30px);
+            background: #333;
+        }
+
+        .theme-toggle-circle::before {
+            content: '🌙';
+            font-size: 16px;
+        }
+
+        .theme-toggle.light .theme-toggle-circle::before {
+            content: '☀️';
+        }
+
+        /* Light Theme */
+        body.light-theme {
+            background: #f5f5f5;
+            color: #1a1a1a;
+        }
+
+        body.light-theme nav {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        body.light-theme .stat-card,
+        body.light-theme .feature-card,
+        body.light-theme .loan-card,
+        body.light-theme .brand-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #1a1a1a;
+        }
+
+        body.light-theme .bg-animation {
+            opacity: 0.1;
+        }
+
+        body.light-theme .nav-links a {
+            color: #1a1a1a;
+        }
+
+        body.light-theme .stat-label,
+        body.light-theme .loan-detail span:first-child,
+        body.light-theme .feature-card p,
+        body.light-theme .brand-card p {
+            color: #666;
+        }
+
+        body.light-theme .hero {
+            background-image: 
+                linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(102, 126, 234, 0.2) 50%, rgba(255, 255, 255, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2832&auto=format&fit=crop');
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 48px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .features-grid,
+            .loan-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .theme-toggle {
+                top: 70px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- Day/Night Toggle - Added Only -->
+    <div class="theme-toggle" id="themeToggle">
+        <div class="theme-toggle-circle"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <img style="border-radius: 100%;" src="logo.jpeg" alt="P3 Logo" class="logo-img">
+                <span class="logo-text">P3 Lending</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#lend">Lend</a>
+                <a href="#borrow">Borrow</a>
+                <a href="#reputation">Reputation</a>
+                <a href="#about">About</a>
+                <button class="connect-wallet">Connect Wallet</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Decentralized P2P Lending</h1>
+        <p style="color: white;">Revolutionizing finance through <span class="highlight-word highlight-blockchain">blockchain technology</span>, <span class="highlight-word highlight-bitcoin">Bitcoin</span>, and <span class="highlight-word highlight-trust">trust-based reputation</span> systems</p>
+        <div class="cta-buttons">
+            <button class="cta-primary">Start Lending</button>
+            <button class="cta-secondary">Request a Loan</button>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number">$24.5M</div>
+                <div class="stat-label">Total Value Locked</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12,847</div>
+                <div class="stat-label">Active Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">98.7%</div>
+                <div class="stat-label">Repayment Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">5.2%</div>
+                <div class="stat-label">Average APY</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2>Platform Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔗</div>
+                <h3>Blockchain Security</h3>
+                <p>All transactions are immutably recorded on the blockchain, ensuring complete transparency and security for every loan.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3>Reputation System</h3>
+                <p>Build your on-chain reputation through successful transactions. Higher reputation unlocks better rates and larger loans.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤝</div>
+                <h3>Smart Contracts</h3>
+                <p>Automated loan agreements eliminate intermediaries, reducing costs and ensuring trustless execution of terms.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">₿</div>
+                <h3>Bitcoin Native</h3>
+                <p>All loans denominated in Bitcoin for global accessibility, liquidity, and borderless transactions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3>Global Access</h3>
+                <p>Participate from anywhere in the world. No geographic restrictions or traditional banking requirements.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Transparent Analytics</h3>
+                <p>Real-time dashboards showing platform metrics, loan performance, and market dynamics.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Showcase Section -->
+    <section class="brand-showcase">
+        <div class="brand-container">
+            <h2>P3 Lending Ecosystem</h2>
+            <div class="brand-grid">
+                <div class="brand-card">
+                    <img src="bc58d6a6-82db-4c7a-9de2-c45e302f7404.jpeg" alt="P3 Brand" class="brand-image">
+                    <h3>Decentralized Trust</h3>
+                    <p>Building reputation through blockchain-verified transactions</p>
+                </div>
+                <div class="brand-card featured">
+                    <img src="investwithpurpose.jpeg" alt="P3 Purpose" class="brand-image">
+                    <h3>Invest with Purpose</h3>
+                    <p>Empowering communities through Bitcoin-based lending</p>
+                </div>
+                <div class="brand-card">
+                    <img src="lendsmart.jpeg" alt="P3 Smart" class="brand-image">
+                    <h3>Lend Smart, Give Back</h3>
+                    <p>Creating sustainable financial opportunities for everyone</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loan Dashboard -->
+    <section class="dashboard">
+        <h2>Active Loan Opportunities</h2>
+        <div class="loan-cards">
+            <div class="loan-card">
+                <div class="loan-header">
+                    <div class="loan-amount">0.5 BTC</div>
+                    <div class="loan-badge">High Trust</div>
+                </div>
+                <div class="loan-details">
+                    <div class="loan-detail">
+                        <span>Interest Rate</span>
+                        <span>4.8% APY</span>
+                    </div>
+                    <div class="loan-detail">
+                        <span>Duration</span>
+                        <span>6 months</span>
+                    </div>
+                    <div class="loan-detail">
+                        <span>Collateral</span>
+                        <span>120% BTC</span>
+                    </div>
+                    <div class="loan-detail">
+                        <span>Purpose</span>
+                        <span>Business</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="reputation-bar">
+                        <div class="reputation-fill" style="width: 92%"></div>
+                    </div>
+                    <small style="color: var(--text-secondary)">Reputation Score: 92/100</small>
+                </div>
+                <button class="loan-action">Fund This Loan</button>
+            </div>
+
+            <div class="loan-card">
+                <div class="loan-header">
+                    <div class="loan-amount">0.25 BTC</div>
+                    <div class="loan-badge">Verified</div>
+                </div>
+                <div class="loan-details">
+                    <div class="loan-detail">
+                        <span>Interest Rate</span>
+                        <span>5.5% APY</span>
+                    </div>
+                    <div class="loan-detail">
+                        <span>Duration</span>
+                        <span>3 months</span>
+                    </div>
+                    <div class="loan-detail">
+                        <span>Collateral</span>
+                        <span>150% BTC</span>
+                    </div>
+                    <div class="loan-detail">
+                        <span>Purpose</span>
+                        <span>Personal</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="reputation-bar">
+                        <div class="reputation-fill" style="width: 78%"></div>
+                    </div>
+                    <small style="color: var(--text-secondary)">Reputation Score: 78/100</small>
+                </div>
+                <button class="loan-action">Fund This Loan</button>
+            </div>
+
+            <div class="loan-card">
+                <div class="loan-header">
+                    <div class="loan-amount">1.2 BTC</div>
+                    <div class="loan-badge">Premium</div>
+                </div>
+                <div class="loan-details">
+                    <div class="loan-detail">
+                        <span>Interest Rate</span>
+                        <span>3.9% APY</span>
+                    </div>
+                    <div class="loan-detail">
+                        <span>Duration</span>
+                        <span>12 months</span>
+                    </div>
+                    <div class="loan-detail">
+                        <span>Collateral</span>
+                        <span>110% BTC</span>
+                    </div>
+                    <div class="loan-detail">
+                        <span>Purpose</span>
+                        <span>Investment</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="reputation-bar">
+                        <div class="reputation-fill" style="width: 96%"></div>
+                    </div>
+                    <small style="color: var(--text-secondary)">Reputation Score: 96/100</small>
+                </div>
+                <button class="loan-action">Fund This Loan</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p style="color: var(--text-secondary)">© 2024 P3 Lending. Revolutionizing peer-to-peer finance.</p>
+            <div class="social-links">
+                <a href="#">📱</a>
+                <a href="#">🐦</a>
+                <a href="#">💬</a>
+                <a href="#">📚</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+
+        // Fade in on scroll effect
+const fadeElements = document.querySelectorAll('.stats, .features, .brand-showcase, .dashboard, .stat-card, .feature-card, .brand-card, .loan-card');
+
+const fadeInObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+});
+
+fadeElements.forEach(element => {
+    element.classList.add('fade-in-up');
+    fadeInObserver.observe(element);
+});
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Parallax effect on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.bg-animation');
+            parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+        });
+
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.querySelectorAll('.stat-card, .feature-card, .loan-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Add fade in animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Connect wallet functionality
+        document.querySelector('.connect-wallet').addEventListener('click', () => {
+            alert('Wallet connection would be implemented here');
+        });
+
+        // CTA button interactions
+        document.querySelector('.cta-primary').addEventListener('click', () => {
+            document.querySelector('.dashboard').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.querySelector('.cta-secondary').addEventListener('click', () => {
+            alert('Loan request form would open here');
+        });
+
+        // Day/Night Theme Toggle - Added Only
+        const themeToggle = document.getElementById('themeToggle');
+        const savedTheme = localStorage.getItem('p3-theme-mode') || 'dark';
+        
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-theme');
+            themeToggle.classList.add('light');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            themeToggle.classList.toggle('light');
+            
+            const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+            localStorage.setItem('p3-theme-mode', currentTheme);
+        });
+    </script>
+</body>
+</html>
