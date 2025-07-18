@@ -23,7 +23,9 @@ As a tech enthusiast currently freelancing with US clients, I deliver transforma
 Currently pursuing further education with a focus on Tech Leadership (Andhra University, 2018-2021), I remain deeply enthusiastic about building AI Agents that drive exponential growth through intelligent automation and machine learning solutions. My passion lies in architecting innovative solutions that not only solve today's challenges but shape tomorrow's possibilities.
 
 https://github.com/SaiAkhil066
+
 https://saiakhil.space
+
 https://www.linkedin.com/in/n-sai-akhil-aa165b319/
 
 Hitesh - Senior AI/LLM and Team Lead
