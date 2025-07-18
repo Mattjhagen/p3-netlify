@@ -16,12 +16,15 @@ My Team
 
 Sai - Director of Operations
 
-I am Akhil, hailing from the vibrant city of Visakhapatnam, nestled in the heart of Andhra Pradesh. My saga began at the tender age of 18 when I embraced the call of duty and stepped into the realm of Defence Services. It was there, amidst the rigor and discipline, that I forged my path, graduating with honors, pursuing MBA and enduring training that tested every fiber of my being. My initiation was no less than cinematic, reminiscent of the spirited kicks my instructor would bestow upon me—a rite of passage that propelled me into life's relentless marathon.
+I am Sai, an AI/ML Engineer & Innovation Architect with an unwavering enthusiasm for technology. With 4+ years specializing in Machine Learning and Artificial Intelligence, coupled with 7+ years in Full Stack Development (MERN), I'm passionate about developing cutting-edge AI solutions that transform businesses.
 
-Yet, amidst the ceaseless race, I found my haven—my undying love for Technology and Computers . This passion became the beacon that guided me through uncharted territories, allowing me to delve into the intricate world of coding and network architectures. Today, I stand before you as a confluence of two divergent paths: a Full Stack Web Developer and Network Engineer, weaving the digital fabric of the future, while bearing the pride of serving my country in uniform.
+As a tech enthusiast currently freelancing with US clients, I deliver transformative AI solutions that automate complex workflows and enhance operational efficiency. My achievements include building RAG-based automation systems that reduce hiring time by 65%, developing ML platforms with 92% prediction accuracy for business metrics, creating autonomous customer support systems that cut response time by 90%, and implementing AI systems with 98% accuracy in document processing.
+
+Currently pursuing further education with a focus on Tech Leadership (Andhra University, 2018-2021), I remain deeply enthusiastic about building AI Agents that drive exponential growth through intelligent automation and machine learning solutions. My passion lies in architecting innovative solutions that not only solve today's challenges but shape tomorrow's possibilities.
 
 https://github.com/SaiAkhil066
-https://portfolio-akhil.netlify.app/
+https://saiakhil.space
+https://www.linkedin.com/in/n-sai-akhil-aa165b319/
 
 Hitesh - Senior AI/LLM and Team Lead
 
