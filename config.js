@@ -5,14 +5,15 @@
 
 const CONFIG = {
   // Infura Project ID - Get yours at https://infura.io
-  INFURA_PROJECT_ID: 'YOUR_INFURA_PROJECT_ID',
+  INFURA_PROJECT_ID: '6b945ed6e0494a1c9ce16b118cd60aac',
   
   // WalletConnect Project ID - Get yours at https://cloud.walletconnect.com
   WALLETCONNECT_PROJECT_ID: 'YOUR_WALLETCONNECT_PROJECT_ID',
   
   // RPC Endpoints
   RPC_ENDPOINTS: {
-    1: 'https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID', // Ethereum Mainnet
+    1: 'https://mainnet.infura.io/v3/6b945ed6e0494a1c9ce16b118cd60aac', // Ethereum Mainnet
+    11155111: 'https://sepolia.infura.io/v3/6b945ed6e0494a1c9ce16b118cd60aac', // Ethereum Sepolia
     137: 'https://polygon-rpc.com', // Polygon
     56: 'https://bsc-dataseed.binance.org', // BSC
     42161: 'https://arb1.arbitrum.io/rpc', // Arbitrum
