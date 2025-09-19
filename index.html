@@ -6,6 +6,11 @@
   <title>P₃ Lending - Decentralized P2P Lending Platform</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Web3 Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@coinbase/wallet-sdk@3.6.0/dist/index.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@4.3.0/dist/web3.min.js"></script>
+  <script src="config.js"></script>
   <style>
     * {
       margin: 0;
@@ -887,6 +892,12 @@
   </div>
 
   <script>
+    // Global variables for wallet connections
+    let web3 = null;
+    let walletConnectProvider = null;
+    let coinbaseWallet = null;
+    let currentWallet = null;
+
     // Wallet Connection Functions
     function openWalletModal() {
       document.getElementById('walletModal').style.display = 'block';
@@ -904,13 +915,21 @@
         walletOption.innerHTML = '<div class="wallet-icon">⏳</div><div class="wallet-name">Connecting...</div>';
         walletOption.style.pointerEvents = 'none';
 
+        let connectionResult;
         if (walletType === 'MetaMask') {
-          await connectMetaMask();
+          connectionResult = await connectMetaMask();
         } else if (walletType === 'WalletConnect') {
-          await connectWalletConnect();
+          connectionResult = await connectWalletConnect();
         } else if (walletType === 'Coinbase') {
-          await connectCoinbase();
+          connectionResult = await connectCoinbase();
         }
+
+        // Store current wallet info
+        currentWallet = {
+          type: walletType,
+          account: connectionResult.account,
+          balance: connectionResult.balance
+        };
 
         // Success - close modal and update button
         closeWalletModal();
@@ -940,15 +959,20 @@
           throw new Error('No accounts found');
         }
         
+        // Create Web3 instance
+        web3 = new Web3(window.ethereum);
+        
         // Get account info
         const account = accounts[0];
-        const balance = await window.ethereum.request({
-          method: 'eth_getBalance',
-          params: [account, 'latest']
-        });
+        const balance = await web3.eth.getBalance(account);
         
         console.log('Connected to MetaMask:', account);
         console.log('Balance:', balance);
+        
+        // Set up event listeners
+        window.ethereum.on('accountsChanged', handleAccountsChanged);
+        window.ethereum.on('chainChanged', handleChainChanged);
+        window.ethereum.on('disconnect', handleDisconnect);
         
         return { account, balance };
       } else {
@@ -957,17 +981,96 @@
     }
 
     async function connectWalletConnect() {
-      // For demo purposes, simulate WalletConnect
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('WalletConnect connection simulated');
-      return { account: '0x742d...3a8f', balance: '0x1bc16d674ec80000' };
+      try {
+        // Initialize WalletConnect provider
+        walletConnectProvider = new WalletConnectProvider.default({
+          rpc: window.CONFIG.RPC_ENDPOINTS,
+          chainId: window.CONFIG.DEFAULT_CHAIN_ID,
+        });
+
+        // Enable session (triggers QR Code modal)
+        await walletConnectProvider.enable();
+
+        // Create Web3 instance
+        web3 = new Web3(walletConnectProvider);
+
+        // Get accounts
+        const accounts = await web3.eth.getAccounts();
+        if (accounts.length === 0) {
+          throw new Error('No accounts found');
+        }
+
+        const account = accounts[0];
+        const balance = await web3.eth.getBalance(account);
+
+        console.log('Connected to WalletConnect:', account);
+        console.log('Balance:', balance);
+
+        // Set up event listeners
+        walletConnectProvider.on('accountsChanged', handleAccountsChanged);
+        walletConnectProvider.on('chainChanged', handleChainChanged);
+        walletConnectProvider.on('disconnect', handleDisconnect);
+
+        return { account, balance };
+      } catch (error) {
+        console.error('WalletConnect connection failed:', error);
+        throw new Error('Failed to connect to WalletConnect. Please try again.');
+      }
     }
 
     async function connectCoinbase() {
-      // For demo purposes, simulate Coinbase connection
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Coinbase Wallet connection simulated');
-      return { account: '0x8ba1...3a8f', balance: '0x2bc16d674ec80000' };
+      try {
+        // Check if Coinbase Wallet is available
+        if (typeof window.ethereum !== 'undefined' && window.ethereum.isCoinbaseWallet) {
+          // Use existing Coinbase Wallet
+          const accounts = await window.ethereum.request({ 
+            method: 'eth_requestAccounts' 
+          });
+          
+          if (accounts.length === 0) {
+            throw new Error('No accounts found');
+          }
+
+          web3 = new Web3(window.ethereum);
+          const account = accounts[0];
+          const balance = await web3.eth.getBalance(account);
+
+          console.log('Connected to Coinbase Wallet:', account);
+          console.log('Balance:', balance);
+
+          return { account, balance };
+        } else {
+          // Initialize Coinbase Wallet SDK
+          coinbaseWallet = new CoinbaseWalletSDK({
+            appName: window.CONFIG.APP_NAME,
+            appLogoUrl: window.CONFIG.APP_LOGO_URL,
+            darkMode: true
+          });
+
+          const ethereum = coinbaseWallet.makeWeb3Provider();
+          web3 = new Web3(ethereum);
+
+          // Request account access
+          const accounts = await ethereum.request({ 
+            method: 'eth_requestAccounts' 
+          });
+
+          if (accounts.length === 0) {
+            throw new Error('No accounts found');
+          }
+
+          const account = accounts[0];
+          const balance = await web3.eth.getBalance(account);
+
+          console.log('Connected to Coinbase Wallet SDK:', account);
+          console.log('Balance:', balance);
+
+          return { account, balance };
+        }
+      } catch (error) {
+        console.error('Coinbase Wallet connection failed:', error);
+        throw new Error('Failed to connect to Coinbase Wallet. Please make sure the wallet is installed and try again.');
+      }
     }
 
     function updateConnectButton(connected, walletType) {
@@ -986,12 +1089,22 @@
     }
 
     function showAccountInfo(walletType) {
+      if (!currentWallet) {
+        alert('No wallet connected');
+        return;
+      }
+
+      const balanceEth = web3 ? web3.utils.fromWei(currentWallet.balance, 'ether') : '0';
+      const shortAddress = currentWallet.account ? 
+        `${currentWallet.account.slice(0, 6)}...${currentWallet.account.slice(-4)}` : 
+        'Unknown';
+
       const accountInfo = `
-        Wallet: ${walletType}
-        Account: 0x742d...3a8f
-        Balance: 0.5 ETH
+        Wallet: ${currentWallet.type}
+        Account: ${shortAddress}
+        Balance: ${parseFloat(balanceEth).toFixed(4)} ETH
         
-        Click to disconnect or change wallet.
+        Click OK to disconnect or Cancel to keep connected.
       `;
       
       if (confirm(accountInfo + '\n\nDo you want to disconnect?')) {
@@ -999,9 +1112,51 @@
       }
     }
 
+    // Event handlers for wallet events
+    function handleAccountsChanged(accounts) {
+      if (accounts.length === 0) {
+        disconnectWallet();
+      } else {
+        console.log('Account changed:', accounts[0]);
+        // Update UI with new account if needed
+      }
+    }
+
+    function handleChainChanged(chainId) {
+      console.log('Chain changed:', chainId);
+      // Handle chain change if needed
+    }
+
+    function handleDisconnect() {
+      console.log('Wallet disconnected');
+      disconnectWallet();
+    }
+
     function disconnectWallet() {
-      updateConnectButton(false);
-      alert('Wallet disconnected successfully!');
+      try {
+        // Disconnect WalletConnect if connected
+        if (walletConnectProvider) {
+          walletConnectProvider.disconnect();
+          walletConnectProvider = null;
+        }
+
+        // Disconnect Coinbase Wallet if connected
+        if (coinbaseWallet) {
+          coinbaseWallet.disconnect();
+          coinbaseWallet = null;
+        }
+
+        // Clear global variables
+        web3 = null;
+        currentWallet = null;
+
+        // Update UI
+        updateConnectButton(false);
+        
+        console.log('Wallet disconnected successfully');
+      } catch (error) {
+        console.error('Error disconnecting wallet:', error);
+      }
     }
 
     // Loan Funding Function
