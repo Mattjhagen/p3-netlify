@@ -2,90 +2,1004 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>P₃ Lending</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>P₃ Lending - Decentralized P2P Lending Platform</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      background: #232323;
-      color: #fff;
-      font-family: 'Segoe UI', Arial, sans-serif;
+    * {
       margin: 0;
       padding: 0;
-      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      color: #ffffff;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Navigation */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(15, 15, 35, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(45, 224, 230, 0.2);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
+      padding: 0 2rem;
     }
-    .logo-container {
-      margin-top: 40px;
-      text-align: center;
-    }
-    .bracket {
-      font-size: 5rem;
-      font-weight: 600;
-      vertical-align: middle;
-      display: inline-block;
-      line-height: 1;
-    }
-    .bracket.left {
-      color: #ff6f9c;
-      margin-right: 10px;
-    }
-    .bracket.right {
-      color: #2de0e6;
-      margin-left: 10px;
-    }
-    .logo-main {
-      display: inline-block;
-      position: relative;
-      font-size: 4rem;
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
       font-weight: 700;
       color: #2de0e6;
-      vertical-align: middle;
     }
-    .logo-main .subscript {
-      position: absolute;
-      right: -1.2em;
-      bottom: 0.2em;
+
+    .logo .bracket {
+      color: #ff6f9c;
+      margin-right: 0.5rem;
+    }
+
+    .logo .subscript {
+      color: #ff9900;
+      font-size: 1.2rem;
+      margin-left: 0.2rem;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-menu a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-menu a:hover {
+      color: #2de0e6;
+    }
+
+    .connect-wallet {
+      background: linear-gradient(135deg, #2de0e6, #ff6f9c);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .connect-wallet:hover {
+      transform: translateY(-2px);
+    }
+
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
       font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 2rem;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #2de0e6, #ff6f9c, #ff9900);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      color: #b8b8d1;
+      line-height: 1.8;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2de0e6, #ff6f9c);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(45, 224, 230, 0.3);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #2de0e6;
+      border: 2px solid #2de0e6;
+      padding: 1rem 2rem;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-secondary:hover {
+      background: #2de0e6;
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    /* Stats Section */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      border: 1px solid rgba(45, 224, 230, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #2de0e6;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: #b8b8d1;
+      font-weight: 500;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 6rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 3rem;
+      color: #ffffff;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 2.5rem;
+      text-align: center;
+      border: 1px solid rgba(45, 224, 230, 0.2);
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      color: #2de0e6;
+    }
+
+    .feature-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #ffffff;
+    }
+
+    .feature-description {
+      color: #b8b8d1;
+      line-height: 1.6;
+    }
+
+    /* Ecosystem Section */
+    .ecosystem {
+      padding: 6rem 2rem;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .ecosystem-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .ecosystem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+
+    .ecosystem-card {
+      background: linear-gradient(135deg, rgba(45, 224, 230, 0.1), rgba(255, 111, 156, 0.1));
+      border-radius: 25px;
+      padding: 3rem;
+      text-align: center;
+      border: 1px solid rgba(45, 224, 230, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ecosystem-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #2de0e6, #ff6f9c, #ff9900);
+    }
+
+    .ecosystem-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #ffffff;
+    }
+
+    .ecosystem-subtitle {
+      color: #2de0e6;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .ecosystem-description {
+      color: #b8b8d1;
+      line-height: 1.6;
+    }
+
+    /* Loan Opportunities Section */
+    .loan-opportunities {
+      padding: 6rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .loans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .loan-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid rgba(45, 224, 230, 0.2);
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease;
+    }
+
+    .loan-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .loan-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .loan-amount {
+      font-size: 1.8rem;
+      font-weight: 700;
       color: #ff9900;
+    }
+
+    .loan-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
       font-weight: 600;
     }
-    .logo-text {
-      color: #ff9900;
-      font-size: 2.2rem;
-      font-weight: 600;
-      margin-top: 0.6em;
-      letter-spacing: 0.05em;
+
+    .badge-high {
+      background: linear-gradient(135deg, #2de0e6, #00d4aa);
+      color: white;
     }
-    @media (max-width: 600px) {
-      .bracket {
-        font-size: 3rem;
+
+    .badge-verified {
+      background: linear-gradient(135deg, #ff6f9c, #ff9900);
+      color: white;
+    }
+
+    .badge-premium {
+      background: linear-gradient(135deg, #ff9900, #ff6f9c);
+      color: white;
+    }
+
+    .loan-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .loan-detail {
+      text-align: center;
+    }
+
+    .loan-detail-label {
+      color: #b8b8d1;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .loan-detail-value {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .reputation-score {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      color: #2de0e6;
+      font-weight: 600;
+    }
+
+    .fund-button {
+      width: 100%;
+      background: linear-gradient(135deg, #2de0e6, #ff6f9c);
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .fund-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(45, 224, 230, 0.3);
+    }
+
+    /* Footer */
+    .footer {
+      background: rgba(15, 15, 35, 0.95);
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(45, 224, 230, 0.2);
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-text {
+      color: #b8b8d1;
+      margin-bottom: 2rem;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .social-link {
+      color: #b8b8d1;
+      font-size: 1.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .social-link:hover {
+      color: #2de0e6;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
       }
-      .logo-main {
-        font-size: 2.2rem;
+
+      .mobile-menu-toggle {
+        display: block;
       }
-      .logo-main .subscript {
-        font-size: 1rem;
-        right: -0.9em;
-        bottom: 0.1em;
+
+      .hero h1 {
+        font-size: 2.5rem;
       }
-      .logo-text {
-        font-size: 1.3rem;
+
+      .hero p {
+        font-size: 1.1rem;
       }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ecosystem-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .loans-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-container {
+        padding: 0 1rem;
+      }
+
+      .hero {
+        padding: 0 1rem;
+      }
+
+      .features, .ecosystem, .loan-opportunities {
+        padding: 4rem 1rem;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* Wallet Connection Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      margin: 10% auto;
+      padding: 2rem;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 500px;
+      border: 1px solid rgba(45, 224, 230, 0.3);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .close {
+      color: #b8b8d1;
+      font-size: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .close:hover {
+      color: #2de0e6;
+    }
+
+    .wallet-options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .wallet-option {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(45, 224, 230, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .wallet-option:hover {
+      background: rgba(45, 224, 230, 0.1);
+      border-color: #2de0e6;
+    }
+
+    .wallet-icon {
+      font-size: 2rem;
+      color: #2de0e6;
+    }
+
+    .wallet-name {
+      font-weight: 600;
+      color: #ffffff;
     }
   </style>
 </head>
 <body>
-  <div class="logo-container">
-    <span class="bracket left">(</span>
-    <span class="logo-main">
-      P
-      <span class="subscript">3</span>
-    </span>
-    <span class="bracket right">)</span>
-    <div class="logo-text">Lending</div>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <span class="bracket">(</span>
+        P<span class="subscript">3</span>
+        <span class="bracket">)</span>
+        <span style="margin-left: 0.5rem;">Lending</span>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="#home">🏠 Home</a></li>
+        <li><a href="#lend">💰 Lend</a></li>
+        <li><a href="#borrow">💳 Borrow</a></li>
+        <li><a href="#reputation">⭐ Reputation</a></li>
+        <li><a href="#about">ℹ️ About</a></li>
+      </ul>
+      <button class="connect-wallet" onclick="openWalletModal()">🔗 Connect Wallet</button>
+      <button class="mobile-menu-toggle">☰</button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="hero-content fade-in-up">
+      <h1>Decentralized P2P Lending</h1>
+      <p>Revolutionizing finance through blockchain technology, Bitcoin, and trust-based reputation systems</p>
+      <div class="hero-buttons">
+        <a href="#lend" class="btn-primary">Start Lending</a>
+        <a href="#borrow" class="btn-secondary">Request a Loan</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats">
+    <div class="stat-card fade-in-up">
+      <div class="stat-number">$24.5M</div>
+      <div class="stat-label">Total Value Locked</div>
+    </div>
+    <div class="stat-card fade-in-up">
+      <div class="stat-number">12,847</div>
+      <div class="stat-label">Active Users</div>
+    </div>
+    <div class="stat-card fade-in-up">
+      <div class="stat-number">98.7%</div>
+      <div class="stat-label">Repayment Rate</div>
+    </div>
+    <div class="stat-card fade-in-up">
+      <div class="stat-number">5.2%</div>
+      <div class="stat-label">Average APY</div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <h2 class="section-title">Platform Features</h2>
+    <div class="features-grid">
+      <div class="feature-card fade-in-up">
+        <div class="feature-icon">🔗</div>
+        <h3 class="feature-title">Blockchain Security</h3>
+        <p class="feature-description">All transactions are immutably recorded on the blockchain, ensuring complete transparency and security for every loan.</p>
+      </div>
+      <div class="feature-card fade-in-up">
+        <div class="feature-icon">⭐</div>
+        <h3 class="feature-title">Reputation System</h3>
+        <p class="feature-description">Build your on-chain reputation through successful transactions. Higher reputation unlocks better rates and larger loans.</p>
+      </div>
+      <div class="feature-card fade-in-up">
+        <div class="feature-icon">🤝</div>
+        <h3 class="feature-title">Smart Contracts</h3>
+        <p class="feature-description">Automated loan agreements eliminate intermediaries, reducing costs and ensuring trustless execution of terms.</p>
+      </div>
+      <div class="feature-card fade-in-up">
+        <div class="feature-icon">₿</div>
+        <h3 class="feature-title">Bitcoin Native</h3>
+        <p class="feature-description">All loans denominated in Bitcoin for global accessibility, liquidity, and borderless transactions.</p>
+      </div>
+      <div class="feature-card fade-in-up">
+        <div class="feature-icon">🌍</div>
+        <h3 class="feature-title">Global Access</h3>
+        <p class="feature-description">Participate from anywhere in the world. No geographic restrictions or traditional banking requirements.</p>
+      </div>
+      <div class="feature-card fade-in-up">
+        <div class="feature-icon">📊</div>
+        <h3 class="feature-title">Transparent Analytics</h3>
+        <p class="feature-description">Real-time dashboards showing platform metrics, loan performance, and market dynamics.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ecosystem Section -->
+  <section id="ecosystem" class="ecosystem">
+    <div class="ecosystem-content">
+      <h2 class="section-title">P3 Lending Ecosystem</h2>
+      <div class="ecosystem-grid">
+        <div class="ecosystem-card fade-in-up">
+          <h3 class="ecosystem-title">P3 Brand</h3>
+          <div class="ecosystem-subtitle">Decentralized Trust</div>
+          <p class="ecosystem-description">Building reputation through blockchain-verified transactions</p>
+        </div>
+        <div class="ecosystem-card fade-in-up">
+          <h3 class="ecosystem-title">P3 Purpose</h3>
+          <div class="ecosystem-subtitle">Invest with Purpose</div>
+          <p class="ecosystem-description">Empowering communities through Bitcoin-based lending</p>
+        </div>
+        <div class="ecosystem-card fade-in-up">
+          <h3 class="ecosystem-title">P3 Smart</h3>
+          <div class="ecosystem-subtitle">Lend Smart, Give Back</div>
+          <p class="ecosystem-description">Creating sustainable financial opportunities for everyone</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loan Opportunities Section -->
+  <section id="lend" class="loan-opportunities">
+    <h2 class="section-title">Active Loan Opportunities</h2>
+    <div class="loans-grid">
+      <div class="loan-card fade-in-up">
+        <div class="loan-header">
+          <div class="loan-amount">0.5 BTC</div>
+          <div class="loan-badge badge-high">High Trust</div>
+        </div>
+        <div class="loan-details">
+          <div class="loan-detail">
+            <div class="loan-detail-label">Interest Rate</div>
+            <div class="loan-detail-value">4.8% APY</div>
+          </div>
+          <div class="loan-detail">
+            <div class="loan-detail-label">Duration</div>
+            <div class="loan-detail-value">6 months</div>
+          </div>
+          <div class="loan-detail">
+            <div class="loan-detail-label">Collateral</div>
+            <div class="loan-detail-value">120% BTC</div>
+          </div>
+          <div class="loan-detail">
+            <div class="loan-detail-label">Purpose</div>
+            <div class="loan-detail-value">Business</div>
+          </div>
+        </div>
+        <div class="reputation-score">
+          <span>⭐</span>
+          <span>Reputation Score: 92/100</span>
+        </div>
+        <button class="fund-button" onclick="fundLoan('0.5 BTC')">Fund This Loan</button>
+      </div>
+
+      <div class="loan-card fade-in-up">
+        <div class="loan-header">
+          <div class="loan-amount">0.25 BTC</div>
+          <div class="loan-badge badge-verified">Verified</div>
+        </div>
+        <div class="loan-details">
+          <div class="loan-detail">
+            <div class="loan-detail-label">Interest Rate</div>
+            <div class="loan-detail-value">5.5% APY</div>
+          </div>
+          <div class="loan-detail">
+            <div class="loan-detail-label">Duration</div>
+            <div class="loan-detail-value">3 months</div>
+          </div>
+          <div class="loan-detail">
+            <div class="loan-detail-label">Collateral</div>
+            <div class="loan-detail-value">150% BTC</div>
+          </div>
+          <div class="loan-detail">
+            <div class="loan-detail-label">Purpose</div>
+            <div class="loan-detail-value">Personal</div>
+          </div>
+        </div>
+        <div class="reputation-score">
+          <span>⭐</span>
+          <span>Reputation Score: 78/100</span>
+        </div>
+        <button class="fund-button" onclick="fundLoan('0.25 BTC')">Fund This Loan</button>
+      </div>
+
+      <div class="loan-card fade-in-up">
+        <div class="loan-header">
+          <div class="loan-amount">1.2 BTC</div>
+          <div class="loan-badge badge-premium">Premium</div>
+        </div>
+        <div class="loan-details">
+          <div class="loan-detail">
+            <div class="loan-detail-label">Interest Rate</div>
+            <div class="loan-detail-value">3.9% APY</div>
+          </div>
+          <div class="loan-detail">
+            <div class="loan-detail-label">Duration</div>
+            <div class="loan-detail-value">12 months</div>
+          </div>
+          <div class="loan-detail">
+            <div class="loan-detail-label">Collateral</div>
+            <div class="loan-detail-value">110% BTC</div>
+          </div>
+          <div class="loan-detail">
+            <div class="loan-detail-label">Purpose</div>
+            <div class="loan-detail-value">Investment</div>
+          </div>
+        </div>
+        <div class="reputation-score">
+          <span>⭐</span>
+          <span>Reputation Score: 96/100</span>
+        </div>
+        <button class="fund-button" onclick="fundLoan('1.2 BTC')">Fund This Loan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-text">© 2024 P3 Lending. Revolutionizing peer-to-peer finance.</div>
+      <div class="social-links">
+        <a href="#" class="social-link">📱</a>
+        <a href="#" class="social-link">🐦</a>
+        <a href="#" class="social-link">💬</a>
+        <a href="#" class="social-link">📚</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Wallet Connection Modal -->
+  <div id="walletModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Connect Your Wallet</h3>
+        <span class="close" onclick="closeWalletModal()">&times;</span>
+      </div>
+      <div class="wallet-options">
+        <div class="wallet-option" onclick="connectWallet('MetaMask')">
+          <div class="wallet-icon">🦊</div>
+          <div class="wallet-name">MetaMask</div>
+        </div>
+        <div class="wallet-option" onclick="connectWallet('WalletConnect')">
+          <div class="wallet-icon">🔗</div>
+          <div class="wallet-name">WalletConnect</div>
+        </div>
+        <div class="wallet-option" onclick="connectWallet('Coinbase')">
+          <div class="wallet-icon">🔵</div>
+          <div class="wallet-name">Coinbase Wallet</div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <script>
+    // Wallet Connection Functions
+    function openWalletModal() {
+      document.getElementById('walletModal').style.display = 'block';
+    }
+
+    function closeWalletModal() {
+      document.getElementById('walletModal').style.display = 'none';
+    }
+
+    function connectWallet(walletType) {
+      // Simulate wallet connection
+      alert(`Connecting to ${walletType}...`);
+      closeWalletModal();
+      
+      // Update connect button
+      const connectBtn = document.querySelector('.connect-wallet');
+      connectBtn.textContent = '🔗 Connected';
+      connectBtn.style.background = 'linear-gradient(135deg, #00d4aa, #2de0e6)';
+    }
+
+    // Loan Funding Function
+    function fundLoan(amount) {
+      const connectBtn = document.querySelector('.connect-wallet');
+      if (!connectBtn.textContent.includes('Connected')) {
+        alert('Please connect your wallet first!');
+        openWalletModal();
+        return;
+      }
+      
+      alert(`Funding loan of ${amount}...\n\nThis would initiate a smart contract for the loan agreement.`);
+    }
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Intersection Observer for animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe all fade-in-up elements
+    document.querySelectorAll('.fade-in-up').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+      observer.observe(el);
+    });
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('walletModal');
+      if (event.target === modal) {
+        closeWalletModal();
+      }
+    }
+
+    // Mobile menu toggle (basic implementation)
+    document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+      const navMenu = document.querySelector('.nav-menu');
+      navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    // Add some interactive stats animation
+    function animateStats() {
+      const statNumbers = document.querySelectorAll('.stat-number');
+      statNumbers.forEach(stat => {
+        const finalValue = stat.textContent;
+        const isPercentage = finalValue.includes('%');
+        const isDollar = finalValue.includes('$');
+        const numericValue = parseFloat(finalValue.replace(/[$,%]/g, ''));
+        
+        let currentValue = 0;
+        const increment = numericValue / 50;
+        const timer = setInterval(() => {
+          currentValue += increment;
+          if (currentValue >= numericValue) {
+            currentValue = numericValue;
+            clearInterval(timer);
+          }
+          
+          let displayValue = Math.floor(currentValue);
+          if (isDollar) {
+            stat.textContent = '$' + displayValue.toLocaleString() + 'M';
+          } else if (isPercentage) {
+            stat.textContent = displayValue + '%';
+          } else {
+            stat.textContent = displayValue.toLocaleString();
+          }
+        }, 30);
+      });
+    }
+
+    // Trigger stats animation when they come into view
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateStats();
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const statsSection = document.querySelector('.stats');
+    if (statsSection) {
+      statsObserver.observe(statsSection);
+    }
+  </script>
 </body>
 </html>
