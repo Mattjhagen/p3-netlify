@@ -622,6 +622,20 @@
       font-weight: 600;
       color: #ffffff;
     }
+
+    .wallet-option.connecting {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .wallet-option.connecting .wallet-icon {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -882,15 +896,112 @@
       document.getElementById('walletModal').style.display = 'none';
     }
 
-    function connectWallet(walletType) {
-      // Simulate wallet connection
-      alert(`Connecting to ${walletType}...`);
-      closeWalletModal();
-      
-      // Update connect button
+    async function connectWallet(walletType) {
+      try {
+        // Show loading state
+        const walletOption = event.target.closest('.wallet-option');
+        const originalContent = walletOption.innerHTML;
+        walletOption.innerHTML = '<div class="wallet-icon">⏳</div><div class="wallet-name">Connecting...</div>';
+        walletOption.style.pointerEvents = 'none';
+
+        if (walletType === 'MetaMask') {
+          await connectMetaMask();
+        } else if (walletType === 'WalletConnect') {
+          await connectWalletConnect();
+        } else if (walletType === 'Coinbase') {
+          await connectCoinbase();
+        }
+
+        // Success - close modal and update button
+        closeWalletModal();
+        updateConnectButton(true, walletType);
+        
+      } catch (error) {
+        console.error('Wallet connection failed:', error);
+        
+        // Reset the wallet option
+        const walletOption = event.target.closest('.wallet-option');
+        walletOption.innerHTML = originalContent;
+        walletOption.style.pointerEvents = 'auto';
+        
+        // Show error message
+        alert(`Failed to connect to ${walletType}. Please make sure the wallet is installed and try again.`);
+      }
+    }
+
+    async function connectMetaMask() {
+      if (typeof window.ethereum !== 'undefined') {
+        // Request account access
+        const accounts = await window.ethereum.request({ 
+          method: 'eth_requestAccounts' 
+        });
+        
+        if (accounts.length === 0) {
+          throw new Error('No accounts found');
+        }
+        
+        // Get account info
+        const account = accounts[0];
+        const balance = await window.ethereum.request({
+          method: 'eth_getBalance',
+          params: [account, 'latest']
+        });
+        
+        console.log('Connected to MetaMask:', account);
+        console.log('Balance:', balance);
+        
+        return { account, balance };
+      } else {
+        throw new Error('MetaMask not detected. Please install MetaMask extension.');
+      }
+    }
+
+    async function connectWalletConnect() {
+      // For demo purposes, simulate WalletConnect
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      console.log('WalletConnect connection simulated');
+      return { account: '0x742d...3a8f', balance: '0x1bc16d674ec80000' };
+    }
+
+    async function connectCoinbase() {
+      // For demo purposes, simulate Coinbase connection
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      console.log('Coinbase Wallet connection simulated');
+      return { account: '0x8ba1...3a8f', balance: '0x2bc16d674ec80000' };
+    }
+
+    function updateConnectButton(connected, walletType) {
       const connectBtn = document.querySelector('.connect-wallet');
-      connectBtn.textContent = '🔗 Connected';
-      connectBtn.style.background = 'linear-gradient(135deg, #00d4aa, #2de0e6)';
+      if (connected) {
+        connectBtn.textContent = '🔗 Connected';
+        connectBtn.style.background = 'linear-gradient(135deg, #00d4aa, #2de0e6)';
+        connectBtn.onclick = function() {
+          showAccountInfo(walletType);
+        };
+      } else {
+        connectBtn.textContent = '🔗 Connect Wallet';
+        connectBtn.style.background = 'linear-gradient(135deg, #2de0e6, #ff6f9c)';
+        connectBtn.onclick = openWalletModal;
+      }
+    }
+
+    function showAccountInfo(walletType) {
+      const accountInfo = `
+        Wallet: ${walletType}
+        Account: 0x742d...3a8f
+        Balance: 0.5 ETH
+        
+        Click to disconnect or change wallet.
+      `;
+      
+      if (confirm(accountInfo + '\n\nDo you want to disconnect?')) {
+        disconnectWallet();
+      }
+    }
+
+    function disconnectWallet() {
+      updateConnectButton(false);
+      alert('Wallet disconnected successfully!');
     }
 
     // Loan Funding Function
