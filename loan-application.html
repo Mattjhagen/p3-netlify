@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>P₃ Lending - Apply for Loan</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      color: #ffffff;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Navigation */
+    .navbar {
+      background: rgba(15, 15, 35, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(45, 224, 230, 0.2);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2de0e6;
+      text-decoration: none;
+    }
+
+    .logo .bracket {
+      color: #ff6f9c;
+      margin-right: 0.5rem;
+    }
+
+    .logo .subscript {
+      color: #ff9900;
+      font-size: 1.2rem;
+      margin-left: 0.2rem;
+    }
+
+    .back-button {
+      background: transparent;
+      border: 1px solid rgba(45, 224, 230, 0.3);
+      color: #2de0e6;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .back-button:hover {
+      background: rgba(45, 224, 230, 0.1);
+      border-color: #2de0e6;
+    }
+
+    /* Main Content */
+    .main-content {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #2de0e6, #ff6f9c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-subtitle {
+      color: #b8b8d1;
+      font-size: 1.1rem;
+    }
+
+    /* Form Container */
+    .form-container {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 3rem;
+      border: 1px solid rgba(45, 224, 230, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .form-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-icon {
+      color: #2de0e6;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      color: #ffffff;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(45, 224, 230, 0.3);
+      border-radius: 15px;
+      color: #ffffff;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #2de0e6;
+      background: rgba(45, 224, 230, 0.1);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-input::placeholder, .form-textarea::placeholder {
+      color: #b8b8d1;
+    }
+
+    /* Loan Calculator */
+    .loan-calculator {
+      background: rgba(45, 224, 230, 0.1);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(45, 224, 230, 0.3);
+    }
+
+    .calculator-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #2de0e6;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .calculator-item {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+
+    .calculator-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ff9900;
+      margin-bottom: 0.5rem;
+    }
+
+    .calculator-label {
+      color: #b8b8d1;
+      font-size: 0.9rem;
+    }
+
+    /* Reputation Display */
+    .reputation-display {
+      background: linear-gradient(135deg, rgba(45, 224, 230, 0.1), rgba(255, 111, 156, 0.1));
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(45, 224, 230, 0.3);
+      text-align: center;
+    }
+
+    .reputation-score {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2de0e6;
+      margin-bottom: 0.5rem;
+    }
+
+    .reputation-text {
+      color: #b8b8d1;
+      margin-bottom: 1rem;
+    }
+
+    .reputation-benefits {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+
+    .benefit-item {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .benefit-value {
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .benefit-label {
+      color: #b8b8d1;
+      font-size: 0.9rem;
+    }
+
+    /* Submit Button */
+    .submit-section {
+      text-align: center;
+      margin-top: 3rem;
+    }
+
+    .submit-button {
+      background: linear-gradient(135deg, #2de0e6, #ff6f9c);
+      color: white;
+      border: none;
+      padding: 1.2rem 3rem;
+      border-radius: 30px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .submit-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(45, 224, 230, 0.3);
+    }
+
+    .submit-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Terms and Conditions */
+    .terms-section {
+      margin-top: 2rem;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(45, 224, 230, 0.2);
+    }
+
+    .terms-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 1rem;
+    }
+
+    .terms-text {
+      color: #b8b8d1;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .terms-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .terms-checkbox input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #2de0e6;
+    }
+
+    .terms-checkbox label {
+      color: #b8b8d1;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 0 1rem;
+      }
+
+      .form-container {
+        padding: 2rem;
+      }
+
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .reputation-benefits {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="bracket">(</span>
+        P<span class="subscript">3</span>
+        <span class="bracket">)</span>
+        <span style="margin-left: 0.5rem;">Lending</span>
+      </a>
+      <a href="dashboard.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        Back to Dashboard
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="page-header fade-in-up">
+      <h1 class="page-title">Apply for a Loan</h1>
+      <p class="page-subtitle">Get the funding you need with your blockchain reputation</p>
+    </div>
+
+    <!-- Reputation Display -->
+    <div class="reputation-display fade-in-up">
+      <div class="reputation-score">⭐ 92/100</div>
+      <div class="reputation-text">Your reputation score qualifies you for excellent loan terms</div>
+      <div class="reputation-benefits">
+        <div class="benefit-item">
+          <div class="benefit-value">3.5% - 5.2%</div>
+          <div class="benefit-label">Interest Rate Range</div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-value">Up to 2.5 BTC</div>
+          <div class="benefit-label">Maximum Loan Amount</div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-value">110% - 130%</div>
+          <div class="benefit-label">Collateral Required</div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-value">6-24 months</div>
+          <div class="benefit-label">Loan Duration</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loan Application Form -->
+    <div class="form-container fade-in-up">
+      <form id="loanForm">
+        <!-- Loan Details Section -->
+        <div class="form-section">
+          <h2 class="section-title">
+            <span class="section-icon">💰</span>
+            Loan Details
+          </h2>
+          
+          <div class="form-group">
+            <label class="form-label" for="loanAmount">Loan Amount (BTC)</label>
+            <input type="number" id="loanAmount" name="loanAmount" class="form-input" 
+                   placeholder="0.00" step="0.01" min="0.01" max="2.5" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="loanDuration">Loan Duration</label>
+            <select id="loanDuration" name="loanDuration" class="form-select" required>
+              <option value="">Select duration</option>
+              <option value="6">6 months</option>
+              <option value="12">12 months</option>
+              <option value="18">18 months</option>
+              <option value="24">24 months</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="loanPurpose">Purpose of Loan</label>
+            <select id="loanPurpose" name="loanPurpose" class="form-select" required>
+              <option value="">Select purpose</option>
+              <option value="business">Business Investment</option>
+              <option value="personal">Personal Use</option>
+              <option value="education">Education</option>
+              <option value="emergency">Emergency</option>
+              <option value="investment">Investment</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="loanDescription">Description</label>
+            <textarea id="loanDescription" name="loanDescription" class="form-textarea" 
+                      placeholder="Please provide details about how you plan to use the loan funds..." required></textarea>
+          </div>
+        </div>
+
+        <!-- Collateral Section -->
+        <div class="form-section">
+          <h2 class="section-title">
+            <span class="section-icon">🔒</span>
+            Collateral Information
+          </h2>
+          
+          <div class="form-group">
+            <label class="form-label" for="collateralAmount">Collateral Amount (BTC)</label>
+            <input type="number" id="collateralAmount" name="collateralAmount" class="form-input" 
+                   placeholder="0.00" step="0.01" min="0.01" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="collateralType">Collateral Type</label>
+            <select id="collateralType" name="collateralType" class="form-select" required>
+              <option value="">Select collateral type</option>
+              <option value="bitcoin">Bitcoin (BTC)</option>
+              <option value="ethereum">Ethereum (ETH)</option>
+              <option value="stablecoin">Stablecoin (USDC/USDT)</option>
+              <option value="other">Other Cryptocurrency</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Loan Calculator -->
+        <div class="loan-calculator">
+          <div class="calculator-title">Loan Calculator</div>
+          <div class="calculator-grid">
+            <div class="calculator-item">
+              <div class="calculator-value" id="calculatedInterest">0.00%</div>
+              <div class="calculator-label">Interest Rate</div>
+            </div>
+            <div class="calculator-item">
+              <div class="calculator-value" id="monthlyPayment">0.00 BTC</div>
+              <div class="calculator-label">Monthly Payment</div>
+            </div>
+            <div class="calculator-item">
+              <div class="calculator-value" id="totalInterest">0.00 BTC</div>
+              <div class="calculator-label">Total Interest</div>
+            </div>
+            <div class="calculator-item">
+              <div class="calculator-value" id="totalRepayment">0.00 BTC</div>
+              <div class="calculator-label">Total Repayment</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Personal Information Section -->
+        <div class="form-section">
+          <h2 class="section-title">
+            <span class="section-icon">👤</span>
+            Personal Information
+          </h2>
+          
+          <div class="form-group">
+            <label class="form-label" for="fullName">Full Name</label>
+            <input type="text" id="fullName" name="fullName" class="form-input" 
+                   placeholder="Enter your full name" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input type="email" id="email" name="email" class="form-input" 
+                   placeholder="Enter your email address" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="country">Country</label>
+            <select id="country" name="country" class="form-select" required>
+              <option value="">Select your country</option>
+              <option value="US">United States</option>
+              <option value="UK">United Kingdom</option>
+              <option value="CA">Canada</option>
+              <option value="AU">Australia</option>
+              <option value="DE">Germany</option>
+              <option value="FR">France</option>
+              <option value="JP">Japan</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Terms and Conditions -->
+        <div class="terms-section">
+          <div class="terms-title">Terms and Conditions</div>
+          <div class="terms-text">
+            By applying for a loan on P3 Lending, you agree to the following terms:
+            <br><br>
+            • All loans are denominated in Bitcoin and subject to market volatility
+            <br>
+            • Collateral will be locked in a smart contract for the duration of the loan
+            <br>
+            • Late payments will result in reputation score reduction
+            <br>
+            • Defaulting on a loan will result in collateral liquidation
+            <br>
+            • All transactions are recorded on the blockchain and are irreversible
+            <br>
+            • Platform fees of 0.5% will be deducted from loan proceeds
+          </div>
+          <div class="terms-checkbox">
+            <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+            <label for="agreeTerms">I agree to the terms and conditions and understand the risks involved</label>
+          </div>
+        </div>
+
+        <!-- Submit Section -->
+        <div class="submit-section">
+          <button type="submit" class="submit-button" id="submitButton">
+            Submit Loan Application
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Loan calculator functionality
+    function calculateLoan() {
+      const loanAmount = parseFloat(document.getElementById('loanAmount').value) || 0;
+      const duration = parseInt(document.getElementById('loanDuration').value) || 0;
+      const reputationScore = 92; // User's reputation score
+
+      if (loanAmount > 0 && duration > 0) {
+        // Calculate interest rate based on reputation and loan amount
+        let baseRate = 5.2; // Base rate for highest reputation
+        if (reputationScore >= 90) baseRate = 3.5;
+        else if (reputationScore >= 80) baseRate = 4.2;
+        else if (reputationScore >= 70) baseRate = 4.8;
+        
+        // Adjust rate based on loan amount (larger loans get better rates)
+        if (loanAmount >= 1.0) baseRate -= 0.3;
+        else if (loanAmount >= 0.5) baseRate -= 0.1;
+
+        const monthlyRate = baseRate / 100 / 12;
+        const monthlyPayment = (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, duration)) / 
+                              (Math.pow(1 + monthlyRate, duration) - 1);
+        const totalInterest = (monthlyPayment * duration) - loanAmount;
+        const totalRepayment = loanAmount + totalInterest;
+
+        document.getElementById('calculatedInterest').textContent = baseRate.toFixed(2) + '%';
+        document.getElementById('monthlyPayment').textContent = monthlyPayment.toFixed(4) + ' BTC';
+        document.getElementById('totalInterest').textContent = totalInterest.toFixed(4) + ' BTC';
+        document.getElementById('totalRepayment').textContent = totalRepayment.toFixed(4) + ' BTC';
+      } else {
+        document.getElementById('calculatedInterest').textContent = '0.00%';
+        document.getElementById('monthlyPayment').textContent = '0.00 BTC';
+        document.getElementById('totalInterest').textContent = '0.00 BTC';
+        document.getElementById('totalRepayment').textContent = '0.00 BTC';
+      }
+    }
+
+    // Update calculator when loan details change
+    document.getElementById('loanAmount').addEventListener('input', calculateLoan);
+    document.getElementById('loanDuration').addEventListener('change', calculateLoan);
+
+    // Form submission
+    document.getElementById('loanForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const submitButton = document.getElementById('submitButton');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Processing Application...';
+
+      // Simulate form processing
+      setTimeout(() => {
+        alert('Loan application submitted successfully!\n\nYour application is being reviewed by our smart contract system. You will receive a notification once it\'s approved.');
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Loan Application';
+        
+        // Reset form
+        document.getElementById('loanForm').reset();
+        calculateLoan();
+      }, 2000);
+    });
+
+    // Auto-calculate collateral based on loan amount
+    document.getElementById('loanAmount').addEventListener('input', function() {
+      const loanAmount = parseFloat(this.value) || 0;
+      const collateralAmount = loanAmount * 1.2; // 120% collateral requirement
+      document.getElementById('collateralAmount').value = collateralAmount.toFixed(4);
+    });
+
+    // Intersection Observer for animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe all fade-in-up elements
+    document.querySelectorAll('.fade-in-up').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

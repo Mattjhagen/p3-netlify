@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>P₃ Lending - User Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      color: #ffffff;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Navigation */
+    .navbar {
+      background: rgba(15, 15, 35, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(45, 224, 230, 0.2);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2de0e6;
+      text-decoration: none;
+    }
+
+    .logo .bracket {
+      color: #ff6f9c;
+      margin-right: 0.5rem;
+    }
+
+    .logo .subscript {
+      color: #ff9900;
+      font-size: 1.2rem;
+      margin-left: 0.2rem;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-menu a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-menu a:hover, .nav-menu a.active {
+      color: #2de0e6;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .wallet-address {
+      background: rgba(45, 224, 230, 0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: #2de0e6;
+    }
+
+    /* Dashboard Layout */
+    .dashboard {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    .dashboard-header {
+      margin-bottom: 3rem;
+    }
+
+    .dashboard-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #2de0e6, #ff6f9c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .dashboard-subtitle {
+      color: #b8b8d1;
+      font-size: 1.1rem;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid rgba(45, 224, 230, 0.2);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .stat-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #2de0e6;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: #b8b8d1;
+      font-weight: 500;
+    }
+
+    /* Reputation Section */
+    .reputation-section {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      border: 1px solid rgba(45, 224, 230, 0.2);
+    }
+
+    .reputation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .reputation-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .reputation-score {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: linear-gradient(135deg, #2de0e6, #ff6f9c);
+      padding: 1rem 2rem;
+      border-radius: 25px;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .reputation-bar {
+      background: rgba(255, 255, 255, 0.1);
+      height: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .reputation-fill {
+      background: linear-gradient(90deg, #2de0e6, #ff6f9c);
+      height: 100%;
+      width: 85%;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    .reputation-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .reputation-item {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+    }
+
+    .reputation-item-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2de0e6;
+      margin-bottom: 0.5rem;
+    }
+
+    .reputation-item-label {
+      color: #b8b8d1;
+      font-size: 0.9rem;
+    }
+
+    /* Activity Section */
+    .activity-section {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      border: 1px solid rgba(45, 224, 230, 0.2);
+    }
+
+    .activity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .activity-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .activity-tabs {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .activity-tab {
+      padding: 0.8rem 1.5rem;
+      background: transparent;
+      border: 1px solid rgba(45, 224, 230, 0.3);
+      border-radius: 20px;
+      color: #b8b8d1;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .activity-tab.active {
+      background: linear-gradient(135deg, #2de0e6, #ff6f9c);
+      color: white;
+      border-color: transparent;
+    }
+
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .activity-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(45, 224, 230, 0.1);
+    }
+
+    .activity-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .activity-icon {
+      font-size: 1.5rem;
+      color: #2de0e6;
+    }
+
+    .activity-details h4 {
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .activity-details p {
+      color: #b8b8d1;
+      font-size: 0.9rem;
+    }
+
+    .activity-amount {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #ff9900;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .action-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      border: 1px solid rgba(45, 224, 230, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .action-card:hover {
+      transform: translateY(-5px);
+      border-color: #2de0e6;
+    }
+
+    .action-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #2de0e6;
+    }
+
+    .action-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .action-description {
+      color: #b8b8d1;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+
+      .dashboard {
+        padding: 0 1rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .reputation-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .activity-header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .activity-tabs {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .quick-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <span class="bracket">(</span>
+        P<span class="subscript">3</span>
+        <span class="bracket">)</span>
+        <span style="margin-left: 0.5rem;">Lending</span>
+      </a>
+      <ul class="nav-menu">
+        <li><a href="index.html">🏠 Home</a></li>
+        <li><a href="index.html#lend">💰 Lend</a></li>
+        <li><a href="index.html#borrow">💳 Borrow</a></li>
+        <li><a href="dashboard.html" class="active">⭐ Reputation</a></li>
+        <li><a href="index.html#about">ℹ️ About</a></li>
+      </ul>
+      <div class="user-info">
+        <div class="wallet-address">0x742d...3a8f</div>
+        <button class="connect-wallet" style="background: linear-gradient(135deg, #00d4aa, #2de0e6);">🔗 Connected</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard">
+    <div class="dashboard-header fade-in-up">
+      <h1 class="dashboard-title">Welcome Back, User</h1>
+      <p class="dashboard-subtitle">Manage your lending portfolio and track your reputation</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card fade-in-up">
+        <div class="stat-icon">💰</div>
+        <div class="stat-value">2.4 BTC</div>
+        <div class="stat-label">Total Lended</div>
+      </div>
+      <div class="stat-card fade-in-up">
+        <div class="stat-icon">📈</div>
+        <div class="stat-value">8.2%</div>
+        <div class="stat-label">Average APY</div>
+      </div>
+      <div class="stat-card fade-in-up">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value">15</div>
+        <div class="stat-label">Active Loans</div>
+      </div>
+      <div class="stat-card fade-in-up">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-value">92/100</div>
+        <div class="stat-label">Reputation Score</div>
+      </div>
+    </div>
+
+    <!-- Reputation Section -->
+    <div class="reputation-section fade-in-up">
+      <div class="reputation-header">
+        <h2 class="reputation-title">Your Reputation Profile</h2>
+        <div class="reputation-score">
+          <span>⭐</span>
+          <span>92/100</span>
+        </div>
+      </div>
+      <div class="reputation-bar">
+        <div class="reputation-fill"></div>
+      </div>
+      <div class="reputation-details">
+        <div class="reputation-item">
+          <div class="reputation-item-value">47</div>
+          <div class="reputation-item-label">Successful Loans</div>
+        </div>
+        <div class="reputation-item">
+          <div class="reputation-item-value">100%</div>
+          <div class="reputation-item-label">On-Time Payments</div>
+        </div>
+        <div class="reputation-item">
+          <div class="reputation-item-value">0</div>
+          <div class="reputation-item-label">Defaults</div>
+        </div>
+        <div class="reputation-item">
+          <div class="reputation-item-value">2.1 BTC</div>
+          <div class="reputation-item-label">Total Borrowed</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <div class="action-card fade-in-up" onclick="createLoan()">
+        <div class="action-icon">💳</div>
+        <div class="action-title">Request Loan</div>
+        <div class="action-description">Apply for a new loan with your reputation</div>
+      </div>
+      <div class="action-card fade-in-up" onclick="lendFunds()">
+        <div class="action-icon">💰</div>
+        <div class="action-title">Lend Funds</div>
+        <div class="action-description">Fund loans and earn interest</div>
+      </div>
+      <div class="action-card fade-in-up" onclick="viewPortfolio()">
+        <div class="action-icon">📊</div>
+        <div class="action-title">View Portfolio</div>
+        <div class="action-description">Track your lending performance</div>
+      </div>
+      <div class="action-card fade-in-up" onclick="mentorNewcomers()">
+        <div class="action-icon">🤝</div>
+        <div class="action-title">Mentor Newcomers</div>
+        <div class="action-description">Help new users build reputation</div>
+      </div>
+    </div>
+
+    <!-- Activity Section -->
+    <div class="activity-section fade-in-up">
+      <div class="activity-header">
+        <h2 class="activity-title">Recent Activity</h2>
+        <div class="activity-tabs">
+          <button class="activity-tab active" onclick="showActivity('all')">All</button>
+          <button class="activity-tab" onclick="showActivity('loans')">Loans</button>
+          <button class="activity-tab" onclick="showActivity('lending')">Lending</button>
+        </div>
+      </div>
+      <div class="activity-list">
+        <div class="activity-item">
+          <div class="activity-info">
+            <div class="activity-icon">💰</div>
+            <div class="activity-details">
+              <h4>Loan Repayment</h4>
+              <p>2 hours ago</p>
+            </div>
+          </div>
+          <div class="activity-amount">+0.15 BTC</div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-info">
+            <div class="activity-icon">📈</div>
+            <div class="activity-details">
+              <h4>Interest Earned</h4>
+              <p>1 day ago</p>
+            </div>
+          </div>
+          <div class="activity-amount">+0.003 BTC</div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-info">
+            <div class="activity-icon">🤝</div>
+            <div class="activity-details">
+              <h4>Microloan Sponsored</h4>
+              <p>3 days ago</p>
+            </div>
+          </div>
+          <div class="activity-amount">-0.01 BTC</div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-info">
+            <div class="activity-icon">⭐</div>
+            <div class="activity-details">
+              <h4>Reputation Boost</h4>
+              <p>1 week ago</p>
+            </div>
+          </div>
+          <div class="activity-amount">+5 points</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Activity tab functionality
+    function showActivity(type) {
+      const tabs = document.querySelectorAll('.activity-tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Here you would filter the activity list based on type
+      console.log(`Showing ${type} activity`);
+    }
+
+    // Quick action functions
+    function createLoan() {
+      alert('Redirecting to loan application form...');
+    }
+
+    function lendFunds() {
+      alert('Opening lending opportunities...');
+    }
+
+    function viewPortfolio() {
+      alert('Opening portfolio dashboard...');
+    }
+
+    function mentorNewcomers() {
+      alert('Opening microloan mentorship program...');
+    }
+
+    // Intersection Observer for animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe all fade-in-up elements
+    document.querySelectorAll('.fade-in-up').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+      observer.observe(el);
+    });
+
+    // Animate reputation bar on load
+    window.addEventListener('load', () => {
+      const reputationFill = document.querySelector('.reputation-fill');
+      setTimeout(() => {
+        reputationFill.style.width = '92%';
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
