@@ -3,276 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P3 Lending - Decentralized P2P Lending</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="shortcut icon" href="logo.jpeg" style="border-radius: 100%;" type="image/x-icon">
+    <title>P³ Lending - Decentralized P2P Bitcoin Lending Platform</title>
+    <meta name="description" content="Revolutionary peer-to-peer Bitcoin lending platform with AI risk analysis, smart contracts, and reputation-based credit scoring.">
+    <meta name="keywords" content="bitcoin, lending, defi, web3, blockchain, peer-to-peer, smart-contracts, reputation-system">
+    <meta name="author" content="P³ Lending Team">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://p3lending.com/">
+    <meta property="og:title" content="P³ Lending - Decentralized P2P Bitcoin Lending">
+    <meta property="og:description" content="Revolutionary peer-to-peer Bitcoin lending platform with AI risk analysis and smart contracts.">
+    <meta property="og:image" content="/logo.jpeg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://p3lending.com/">
+    <meta property="twitter:title" content="P³ Lending - Decentralized P2P Bitcoin Lending">
+    <meta property="twitter:description" content="Revolutionary peer-to-peer Bitcoin lending platform with AI risk analysis and smart contracts.">
+    <meta property="twitter:image" content="/logo.jpeg">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="logo.jpeg" type="image/x-icon">
+    <link rel="apple-touch-icon" href="logo.jpeg">
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Theme color -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="msapplication-TileColor" content="#667eea">
+    
+    <!-- Security headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
+    <!-- PWA manifest -->
+    <link rel="manifest" href="/manifest.json">
 </head>
 <body>
-    <div class="bg-animation"></div>
-
-    <!-- Day/Night Toggle - Added Only -->
-    <div class="theme-toggle" id="themeToggle">
-        <div class="theme-toggle-circle"></div>
-    </div>
-
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
-            <div class="logo">
-                <img style="border-radius: 100%;" src="logo.jpeg" alt="P3 Logo" class="logo-img">
-                <span class="logo-text">P3 Lending</span>
-            </div>
-            <div class="nav-links">
-                <a href="#home">Home</a>
-                <a href="#lend">Lend</a>
-                <a href="#borrow">Borrow</a>
-                <a href="#reputation">Reputation</a>
-                <a href="#about">About</a>
-                <button class="connect-wallet">Connect Wallet</button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Add this right after the existing nav -->
-<!-- Mobile Navigation -->
-<!-- Replace the existing mobile-nav-toggle with this -->
-<div class="mobile-nav-toggle" id="mobileNavToggle">
-    <div class="menu-icon">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-    </div>
-</div>
-
-<div class="mobile-menu" id="mobileMenu">
-    <div class="mobile-menu-header">
-        <h3>Menu</h3>
-        <div class="mobile-close" id="mobileClose">✕</div>
-    </div>
-    <div class="mobile-menu-links">
-        <a href="#home">🏠 Home</a>
-        <a href="#lend">💰 Lend</a>
-        <a href="#borrow">💳 Borrow</a>
-        <a href="#reputation">⭐ Reputation</a>
-        <a href="#about">ℹ️ About</a>
-        <button class="mobile-connect-wallet">🔗 Connect Wallet</button>
-    </div>
-</div>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Decentralized P2P Lending</h1>
-        <p style="color: white;">Revolutionizing finance through <span class="highlight-word highlight-blockchain">blockchain technology</span>, <span class="highlight-word highlight-bitcoin">Bitcoin</span>, and <span class="highlight-word highlight-trust">trust-based reputation</span> systems</p>
-        <div class="cta-buttons">
-            <button class="cta-primary">Start Lending</button>
-            <button class="cta-secondary">Request a Loan</button>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="stats-container">
-            <div class="stat-card">
-                <div class="stat-number">$24.5M</div>
-                <div class="stat-label">Total Value Locked</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">12,847</div>
-                <div class="stat-label">Active Users</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">98.7%</div>
-                <div class="stat-label">Repayment Rate</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">5.2%</div>
-                <div class="stat-label">Average APY</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features">
-        <h2>Platform Features</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">🔗</div>
-                <h3>Blockchain Security</h3>
-                <p>All transactions are immutably recorded on the blockchain, ensuring complete transparency and security for every loan.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">⭐</div>
-                <h3>Reputation System</h3>
-                <p>Build your on-chain reputation through successful transactions. Higher reputation unlocks better rates and larger loans.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🤝</div>
-                <h3>Smart Contracts</h3>
-                <p>Automated loan agreements eliminate intermediaries, reducing costs and ensuring trustless execution of terms.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">₿</div>
-                <h3>Bitcoin Native</h3>
-                <p>All loans denominated in Bitcoin for global accessibility, liquidity, and borderless transactions.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🌍</div>
-                <h3>Global Access</h3>
-                <p>Participate from anywhere in the world. No geographic restrictions or traditional banking requirements.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3>Transparent Analytics</h3>
-                <p>Real-time dashboards showing platform metrics, loan performance, and market dynamics.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Brand Showcase Section -->
-    <section class="brand-showcase">
-        <div class="brand-container">
-            <h2>P3 Lending Ecosystem</h2>
-            <div class="brand-grid">
-                <div class="brand-card">
-                    <img src="bc58d6a6-82db-4c7a-9de2-c45e302f7404.jpeg" alt="P3 Brand" class="brand-image">
-                    <h3>Decentralized Trust</h3>
-                    <p>Building reputation through blockchain-verified transactions</p>
-                </div>
-                <div class="brand-card featured">
-                    <img src="investwithpurpose.jpeg" alt="P3 Purpose" class="brand-image">
-                    <h3>Invest with Purpose</h3>
-                    <p>Empowering communities through Bitcoin-based lending</p>
-                </div>
-                <div class="brand-card">
-                    <img src="lendsmart.jpeg" alt="P3 Smart" class="brand-image">
-                    <h3>Lend Smart, Give Back</h3>
-                    <p>Creating sustainable financial opportunities for everyone</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Loan Dashboard -->
-    <section class="dashboard">
-        <h2>Active Loan Opportunities</h2>
-        <div class="loan-cards">
-            <div class="loan-card">
-                <div class="loan-header">
-                    <div class="loan-amount">0.5 BTC</div>
-                    <div class="loan-badge">High Trust</div>
-                </div>
-                <div class="loan-details">
-                    <div class="loan-detail">
-                        <span>Interest Rate</span>
-                        <span>4.8% APY</span>
-                    </div>
-                    <div class="loan-detail">
-                        <span>Duration</span>
-                        <span>6 months</span>
-                    </div>
-                    <div class="loan-detail">
-                        <span>Collateral</span>
-                        <span>120% BTC</span>
-                    </div>
-                    <div class="loan-detail">
-                        <span>Purpose</span>
-                        <span>Business</span>
-                    </div>
-                </div>
-                <div>
-                    <div class="reputation-bar">
-                        <div class="reputation-fill" style="width: 92%"></div>
-                    </div>
-                    <small style="color: var(--text-secondary)">Reputation Score: 92/100</small>
-                </div>
-                <button class="loan-action">Fund This Loan</button>
-            </div>
-
-            <div class="loan-card">
-                <div class="loan-header">
-                    <div class="loan-amount">0.25 BTC</div>
-                    <div class="loan-badge">Verified</div>
-                </div>
-                <div class="loan-details">
-                    <div class="loan-detail">
-                        <span>Interest Rate</span>
-                        <span>5.5% APY</span>
-                    </div>
-                    <div class="loan-detail">
-                        <span>Duration</span>
-                        <span>3 months</span>
-                    </div>
-                    <div class="loan-detail">
-                        <span>Collateral</span>
-                        <span>150% BTC</span>
-                    </div>
-                    <div class="loan-detail">
-                        <span>Purpose</span>
-                        <span>Personal</span>
-                    </div>
-                </div>
-                <div>
-                    <div class="reputation-bar">
-                        <div class="reputation-fill" style="width: 78%"></div>
-                    </div>
-                    <small style="color: var(--text-secondary)">Reputation Score: 78/100</small>
-                </div>
-                <button class="loan-action">Fund This Loan</button>
-            </div>
-
-            <div class="loan-card">
-                <div class="loan-header">
-                    <div class="loan-amount">1.2 BTC</div>
-                    <div class="loan-badge">Premium</div>
-                </div>
-                <div class="loan-details">
-                    <div class="loan-detail">
-                        <span>Interest Rate</span>
-                        <span>3.9% APY</span>
-                    </div>
-                    <div class="loan-detail">
-                        <span>Duration</span>
-                        <span>12 months</span>
-                    </div>
-                    <div class="loan-detail">
-                        <span>Collateral</span>
-                        <span>110% BTC</span>
-                    </div>
-                    <div class="loan-detail">
-                        <span>Purpose</span>
-                        <span>Investment</span>
-                    </div>
-                </div>
-                <div>
-                    <div class="reputation-bar">
-                        <div class="reputation-fill" style="width: 96%"></div>
-                    </div>
-                    <small style="color: var(--text-secondary)">Reputation Score: 96/100</small>
-                </div>
-                <button class="loan-action">Fund This Loan</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <p style="color: var(--text-secondary)">© 2024 P3 Lending. Revolutionizing peer-to-peer finance.</p>
-            <div class="social-links">
-                <a href="#">📱</a>
-                <a href="#">🐦</a>
-                <a href="#">💬</a>
-                <a href="#">📚</a>
-            </div>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

@@ -1,0 +1,95 @@
+name = "p3-lending-platform"
+main = "dist/index.html"
+compatibility_date = "2024-01-01"
+
+[env.production]
+name = "p3-lending-platform"
+route = "p3lending.com/*"
+
+[env.staging]
+name = "p3-lending-platform-staging"
+route = "staging.p3lending.com/*"
+
+# Build configuration
+[build]
+command = "npm run build"
+cwd = "."
+
+# Pages configuration
+[[pages_builds]]
+source = "dist"
+destination_id = "p3-lending-platform"
+
+# Environment variables
+[vars]
+NODE_ENV = "production"
+VITE_API_BASE_URL = "https://api.p3lending.com"
+VITE_WS_URL = "wss://api.p3lending.com/ws"
+
+# Headers for security and performance
+[[headers]]
+for = "/*"
+[headers.values]
+X-Frame-Options = "DENY"
+X-Content-Type-Options = "nosniff"
+X-XSS-Protection = "1; mode=block"
+Referrer-Policy = "strict-origin-when-cross-origin"
+Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Cache static assets
+[[headers]]
+for = "/assets/*"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache images
+[[headers]]
+for = "*.{jpg,jpeg,png,gif,svg,webp}"
+[headers.values]
+Cache-Control = "public, max-age=86400"
+
+# Cache fonts
+[[headers]]
+for = "*.{woff,woff2,ttf,eot}"
+[headers.values]
+Cache-Control = "public, max-age=31536000"
+
+# Redirects
+[[redirects]]
+from = "/home"
+to = "/"
+status = 301
+
+[[redirects]]
+from = "/app"
+to = "/dashboard"
+status = 301
+
+# Functions for API routes
+[functions]
+directory = "functions"
+
+# KV storage for caching
+[[kv_namespaces]]
+binding = "CACHE"
+id = "your-kv-namespace-id"
+preview_id = "your-preview-kv-namespace-id"
+
+# Durable Objects for real-time features
+[[durable_objects.bindings]]
+name = "WEBSOCKET"
+class_name = "WebSocketHandler"
+
+# R2 storage for file uploads
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "p3-lending-files"
+preview_bucket_name = "p3-lending-files-preview"
+
+# Analytics
+[analytics]
+enabled = true
+
+# Performance monitoring
+[observability]
+enabled = true
